@@ -19,7 +19,7 @@ const Sidebar: React.FC<SidebarProps> = ({ companyName, logoUrl, isCollapsed, on
   ];
 
   return (
-    <div className={`bg-slate-900 text-white flex flex-col h-full border-r border-slate-700 transition-all duration-300 ${isCollapsed ? 'w-20' : 'w-64'}`}>
+    <div className={`bg-slate-900 text-white flex flex-col h-full border-r border-slate-700 transition-all duration-300 z-50 ${isCollapsed ? 'w-20 relative' : 'w-64 absolute md:relative'}`}>
       <div className={`p-6 border-b border-slate-800 flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
         {!isCollapsed && (
           <h1 className="text-xl font-bold flex items-center gap-3 animate-fade-in">

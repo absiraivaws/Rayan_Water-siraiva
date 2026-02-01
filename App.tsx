@@ -24,7 +24,17 @@ interface MainLayoutProps {
 const MainLayout: React.FC<MainLayoutProps> = ({ session, companyName, logoUrl, handleLogout }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(() => window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setIsCollapsed(true);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // If session is null, redirect to login. This acts as a protected route.
   if (!session) {
