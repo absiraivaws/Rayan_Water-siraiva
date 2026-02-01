@@ -58,6 +58,7 @@ export function useSupabaseData() {
                     id: d.id,
                     name: d.name,
                     phone: d.phone,
+                    email: d.email,
                     nic: d.nic,
                     licenseNo: d.license_no,
                     licenseExpiry: d.license_expiry,

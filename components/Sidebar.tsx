@@ -6,17 +6,20 @@ interface SidebarProps {
   logoUrl?: string;
   isCollapsed: boolean;
   onToggle: () => void;
+  userRole: 'ADMIN' | 'DRIVER';
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ companyName, logoUrl, isCollapsed, onToggle }) => {
-  const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: 'fa-chart-line' },
-    { id: 'customers', label: 'Customers', icon: 'fa-users' },
-    { id: 'fleet', label: 'Fleet & Drivers', icon: 'fa-truck' },
-    { id: 'routes', label: 'Routes', icon: 'fa-map-location-dot' },
-    { id: 'deliveries', label: 'Daily Delivery', icon: 'fa-clipboard-list' },
-    { id: 'finance', label: 'Finance', icon: 'fa-file-invoice-dollar' },
+const Sidebar: React.FC<SidebarProps> = ({ companyName, logoUrl, isCollapsed, onToggle, userRole }) => {
+  const allMenuItems = [
+    { id: 'dashboard', label: 'Dashboard', icon: 'fa-chart-line', roles: ['ADMIN'] },
+    { id: 'customers', label: 'Customers', icon: 'fa-users', roles: ['ADMIN', 'DRIVER'] },
+    { id: 'fleet', label: 'Fleet & Drivers', icon: 'fa-truck', roles: ['ADMIN'] },
+    { id: 'routes', label: 'Routes', icon: 'fa-map-location-dot', roles: ['ADMIN'] },
+    { id: 'deliveries', label: 'Daily Delivery', icon: 'fa-clipboard-list', roles: ['ADMIN', 'DRIVER'] },
+    { id: 'finance', label: 'Finance', icon: 'fa-file-invoice-dollar', roles: ['ADMIN'] },
   ];
+
+  const menuItems = allMenuItems.filter(item => item.roles.includes(userRole));
 
   return (
     <div className={`bg-slate-900 text-white flex flex-col h-full border-r border-slate-700 transition-all duration-300 z-50 ${isCollapsed ? 'w-20 relative' : 'w-64 absolute md:relative'}`}>
@@ -56,19 +59,21 @@ const Sidebar: React.FC<SidebarProps> = ({ companyName, logoUrl, isCollapsed, on
           </NavLink>
         ))}
 
-        <div className={`pt-4 mt-4 border-t border-slate-800 ${isCollapsed ? 'flex justify-center' : ''}`}>
-          <NavLink
-            to="/settings"
-            title={isCollapsed ? "Settings" : ''}
-            className={({ isActive }) => `flex items-center gap-3 px-3 py-3 rounded-xl transition-all w-full ${isActive
-              ? 'bg-primary text-white'
-              : 'text-slate-400 hover:bg-slate-800 hover:text-white'
-              } ${isCollapsed ? 'justify-center' : ''}`}
-          >
-            <i className="fa-solid fa-gear w-6 text-center text-lg"></i>
-            {!isCollapsed && <span className="font-medium truncate animate-fade-in">Settings</span>}
-          </NavLink>
-        </div>
+        {userRole !== 'DRIVER' && (
+          <div className={`pt-4 mt-4 border-t border-slate-800 ${isCollapsed ? 'flex justify-center' : ''}`}>
+            <NavLink
+              to="/settings"
+              title={isCollapsed ? "Settings" : ''}
+              className={({ isActive }) => `flex items-center gap-3 px-3 py-3 rounded-xl transition-all w-full ${isActive
+                ? 'bg-primary text-white'
+                : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+                } ${isCollapsed ? 'justify-center' : ''}`}
+            >
+              <i className="fa-solid fa-gear w-6 text-center text-lg"></i>
+              {!isCollapsed && <span className="font-medium truncate animate-fade-in">Settings</span>}
+            </NavLink>
+          </div>
+        )}
       </nav>
 
       {/* Footer / Toggle */}

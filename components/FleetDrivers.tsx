@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Vehicle, Driver } from '../types';
 import { useSupabaseData } from '../hooks/useSupabaseData';
 import { useSupabaseMutations } from '../hooks/useSupabaseMutations';
+import { supabase } from '../utils/supabase';
 
 const FleetDrivers: React.FC = () => {
   const { vehicles: fetchedVehicles, drivers: fetchedDrivers, loading: dataLoading, error: dataError } = useSupabaseData();
@@ -29,7 +30,7 @@ const FleetDrivers: React.FC = () => {
 
   const [driverForm, setDriverForm] = useState({
     name: '', phone: '', nic: '', licenseNo: '', licenseExpiry: '',
-    dailySalary: '2500', commissionPct: '2'
+    dailySalary: '2500', commissionPct: '2', email: ''
   });
 
   useEffect(() => {
@@ -41,6 +42,20 @@ const FleetDrivers: React.FC = () => {
   if (dataError) return <div className="p-8 text-center text-red-500">Error: {dataError}</div>;
 
   // --- Handlers ---
+
+  const closeForms = () => {
+    setShowVehicleForm(false);
+    setShowDriverForm(false);
+    setEditingItem(null);
+    setVehicleForm({
+      number: '', capacityValue: '5000', capacityUnit: 'Liters', width: '', height: '',
+      waterTypeAllowed: ['Drinking'], assignedDriverId: '', fuelType: 'Diesel', avgMileage: '8'
+    });
+    setDriverForm({
+      name: '', phone: '', nic: '', licenseNo: '', licenseExpiry: '',
+      dailySalary: '2500', commissionPct: '2', email: ''
+    });
+  };
 
   const toggleVehicleStatus = async (id: string) => {
     const v = vehicles.find(v => v.id === id);
@@ -103,13 +118,14 @@ const FleetDrivers: React.FC = () => {
       setShowVehicleForm(true);
     } else {
       setDriverForm({
-        name: data.name,
-        phone: data.phone,
-        nic: data.nic,
-        licenseNo: data.licenseNo,
-        licenseExpiry: data.licenseExpiry,
-        dailySalary: data.dailySalary.toString(),
-        commissionPct: data.commissionPct.toString()
+        name: data.name || '',
+        phone: data.phone || '',
+        nic: data.nic || '',
+        licenseNo: data.licenseNo || '',
+        licenseExpiry: data.licenseExpiry || '',
+        dailySalary: (data.dailySalary || 0).toString(),
+        commissionPct: (data.commissionPct || 0).toString(),
+        email: data.email || ''
       });
       setShowDriverForm(true);
     }
@@ -153,6 +169,7 @@ const FleetDrivers: React.FC = () => {
         name: driverForm.name,
         phone: driverForm.phone,
         nic: driverForm.nic,
+        email: driverForm.email,
         license_no: driverForm.licenseNo,
         license_expiry: driverForm.licenseExpiry,
         daily_salary: Number(driverForm.dailySalary),
@@ -169,6 +186,21 @@ const FleetDrivers: React.FC = () => {
       alert("Error saving driver: " + err.message);
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleResetPassword = async (email: string) => {
+    if (!email) return alert("No email address found for this driver.");
+    if (!confirm(`Send password reset email to ${email}?`)) return;
+
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + '/reset-password', // Ensure this route exists or defaults to home
+      });
+      if (error) throw error;
+      alert("Password reset email sent!");
+    } catch (err: any) {
+      alert("Error sending reset email: " + err.message);
     }
   };
 
@@ -190,7 +222,7 @@ const FleetDrivers: React.FC = () => {
             {vehicles.map(v => {
               const assignedDriver = v.assignedDriverId ? drivers.find(d => d.id === v.assignedDriverId) : null;
               return (
-                <div key={v.id} className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex items-center justify-between group relative overflow-hidden">
+                <div key={v.id} className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex items-center justify-between group relative z-0 hover:z-10">
                   {v.status !== 'Active' && <div className="absolute left-0 top-0 bottom-0 w-1 bg-red-400"></div>}
                   <div className="flex items-center gap-4">
                     <div className="bg-slate-100 p-4 rounded-xl text-slate-500">
@@ -216,8 +248,11 @@ const FleetDrivers: React.FC = () => {
                       </span>
                     </div>
                     <div className="relative group/menu">
-                      <button className="p-2 text-slate-300 hover:text-slate-600 transition-colors"><i className="fa-solid fa-ellipsis-vertical"></i></button>
-                      <div className="absolute right-0 top-full mt-1 w-36 bg-white rounded-xl shadow-2xl border border-slate-100 py-2 z-20 invisible group-hover/menu:visible opacity-0 group-hover/menu:opacity-100 transition-all scale-95 group-hover/menu:scale-100">
+                      <button className="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400 transition-colors">
+                        <i className="fa-solid fa-ellipsis-vertical"></i>
+                      </button>
+                      {/* Dropdown Menu */}
+                      <div className="absolute right-0 top-full mt-1 w-48 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden hidden group-hover/menu:block z-[60]">
                         <button onClick={() => toggleVehicleStatus(v.id)} className="w-full text-left px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50">Toggle Status</button>
                         <button onClick={() => startEdit('v', v)} className="w-full text-left px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50">Edit Record</button>
                         <div className="h-px bg-slate-50 my-1"></div>
@@ -244,7 +279,7 @@ const FleetDrivers: React.FC = () => {
           </div>
           <div className="grid gap-4">
             {drivers.map(d => (
-              <div key={d.id} className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex items-center justify-between group relative overflow-hidden">
+              <div key={d.id} className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex items-center justify-between group relative z-0 hover:z-10">
                 <div className="flex items-center gap-4">
                   <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary font-bold text-xl border border-primary/20">
                     {d.name.charAt(0)}
@@ -265,10 +300,19 @@ const FleetDrivers: React.FC = () => {
                     {d.status}
                   </span>
                   <div className="relative group/menu">
-                    <button className="p-2 text-slate-300 hover:text-slate-600 transition-colors"><i className="fa-solid fa-ellipsis-vertical"></i></button>
-                    <div className="absolute right-0 top-full mt-1 w-36 bg-white rounded-xl shadow-2xl border border-slate-100 py-2 z-20 invisible group-hover/menu:visible opacity-0 group-hover/menu:opacity-100 transition-all scale-95 group-hover/menu:scale-100">
+                    <button className="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400 transition-colors">
+                      <i className="fa-solid fa-ellipsis-vertical"></i>
+                    </button>
+                    <div className="absolute right-0 top-full mt-1 w-48 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden hidden group-hover/menu:block z-[60]">
                       <button onClick={() => toggleDriverStatus(d.id)} className="w-full text-left px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50">Toggle Status</button>
                       <button onClick={() => startEdit('d', d)} className="w-full text-left px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50">Edit Record</button>
+
+                      {d.email && (
+                        <button onClick={() => handleResetPassword(d.email!)} className="w-full text-left px-4 py-2 text-xs font-bold text-primary hover:bg-primary/5">
+                          Send Password Reset
+                        </button>
+                      )}
+
                       <div className="h-px bg-slate-50 my-1"></div>
                       <button onClick={() => setDeleteWarning({ type: 'd', id: d.id })} className="w-full text-left px-4 py-2 text-xs font-bold text-red-500 hover:bg-red-50">Delete</button>
                     </div>
@@ -300,7 +344,7 @@ const FleetDrivers: React.FC = () => {
 
       {/* Vehicle Form Overlay */}
       {showVehicleForm && (
-        <div className="fixed inset-0 z-50 flex justify-end">
+        <div className="fixed inset-0 z-[100] flex justify-end">
           <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={closeForms}></div>
           <div className="relative w-full max-w-md bg-white h-full shadow-2xl p-8 animate-slide-in overflow-y-auto">
             <h3 className="text-xl font-bold mb-6">{editingItem ? 'Edit Vehicle' : 'New Vehicle Registration'}</h3>
@@ -354,7 +398,7 @@ const FleetDrivers: React.FC = () => {
 
       {/* Driver Form Overlay */}
       {showDriverForm && (
-        <div className="fixed inset-0 z-50 flex justify-end">
+        <div className="fixed inset-0 z-[100] flex justify-end">
           <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={closeForms}></div>
           <div className="relative w-full max-w-md bg-white h-full shadow-2xl p-8 animate-slide-in overflow-y-auto">
             <h3 className="text-xl font-bold mb-6">{editingItem ? 'Edit Driver' : 'New Driver Onboarding'}</h3>
@@ -362,6 +406,7 @@ const FleetDrivers: React.FC = () => {
               <input required value={driverForm.name} onChange={e => setDriverForm({ ...driverForm, name: e.target.value })} className="w-full p-3 bg-slate-50 border rounded-xl" placeholder="Full Name" />
               <input required value={driverForm.nic} onChange={e => setDriverForm({ ...driverForm, nic: e.target.value })} className="w-full p-3 bg-slate-50 border rounded-xl" placeholder="NIC Number" />
               <input required value={driverForm.phone} onChange={e => setDriverForm({ ...driverForm, phone: e.target.value })} className="w-full p-3 bg-slate-50 border rounded-xl" placeholder="Phone Number" />
+              <input type="email" value={driverForm.email} onChange={e => setDriverForm({ ...driverForm, email: e.target.value })} className="w-full p-3 bg-slate-50 border rounded-xl" placeholder="Email Address (For Login)" />
               <input required value={driverForm.licenseNo} onChange={e => setDriverForm({ ...driverForm, licenseNo: e.target.value })} className="w-full p-3 bg-slate-50 border rounded-xl" placeholder="License Number" />
               <div>
                 <label className="text-xs font-bold text-slate-400 ml-1">License Expiry</label>

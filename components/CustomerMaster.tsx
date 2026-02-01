@@ -1,10 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { Customer } from '../types';
 import { useSupabaseData } from '../hooks/useSupabaseData';
 import { useSupabaseMutations } from '../hooks/useSupabaseMutations';
 
 const CustomerMaster: React.FC = () => {
+  const { userRole } = useOutletContext<{ userRole: 'ADMIN' | 'DRIVER' }>();
   const { customers: data, routes, transactions, loading: dataLoading, error: dataError } = useSupabaseData();
   const { addCustomer, updateCustomer, deleteCustomer } = useSupabaseMutations();
 
@@ -16,7 +18,7 @@ const CustomerMaster: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
   const [formData, setFormData] = useState({
-    name: '', phone: '', whatsapp: '', nic: '', dob: '', address: '', waterType: 'Drinking', price: '150', routeId: '', creditLimit: '5000', creditAllowed: true, displayId: ''
+    name: '', phone: '', whatsapp: '', nic: '', dob: '', address: '', waterType: 'Drinking', price: '150', routeId: '', creditLimit: '5000', creditAllowed: true, displayId: '', lat: 0, lng: 0
   });
 
   // Filters State
@@ -149,7 +151,11 @@ const CustomerMaster: React.FC = () => {
       routeId: c.routeId,
       creditLimit: c.creditLimit.toString(),
       creditAllowed: c.creditAllowed,
-      displayId: c.displayId || ''
+      creditLimit: c.creditLimit.toString(),
+      creditAllowed: c.creditAllowed,
+      displayId: c.displayId || '',
+      lat: c.lat,
+      lng: c.lng
     });
     setShowForm(true);
   };
@@ -238,7 +244,9 @@ const CustomerMaster: React.FC = () => {
       }
     };
 
-    if (editingCustomer) {
+    if (formData.lat && formData.lng) {
+      processSubmission(formData.lat, formData.lng);
+    } else if (editingCustomer) {
       processSubmission(editingCustomer.lat, editingCustomer.lng);
     } else {
       if ("geolocation" in navigator) {
@@ -392,11 +400,16 @@ const CustomerMaster: React.FC = () => {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button onClick={() => startEdit(c)} className="w-8 h-8 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all"><i className="fa-solid fa-pen text-xs"></i></button>
-                      <button onClick={() => toggleCustomerStatus(c.id)} className={`w-8 h-8 rounded-lg ${c.status === 'Active' ? 'bg-amber-50 text-amber-600 hover:bg-amber-600' : 'bg-accent/10 text-accent hover:bg-accent'} hover:text-white transition-all`} title={c.status === 'Active' ? 'Deactivate' : 'Activate'}>
-                        <i className={`fa-solid ${c.status === 'Active' ? 'fa-ban' : 'fa-check'} text-xs`}></i>
-                      </button>
-                      <button onClick={() => handleDelete(c.id)} className="w-8 h-8 rounded-lg bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-all"><i className="fa-solid fa-trash-can text-xs"></i></button>
+                      {userRole === 'ADMIN' && (
+                        <>
+                          <button onClick={() => startEdit(c)} className="w-8 h-8 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all"><i className="fa-solid fa-pen text-xs"></i></button>
+                          <button onClick={() => toggleCustomerStatus(c.id)} className={`w-8 h-8 rounded-lg ${c.status === 'Active' ? 'bg-amber-50 text-amber-600 hover:bg-amber-600' : 'bg-accent/10 text-accent hover:bg-accent'} hover:text-white transition-all`} title={c.status === 'Active' ? 'Deactivate' : 'Activate'}>
+                            <i className={`fa-solid ${c.status === 'Active' ? 'fa-ban' : 'fa-check'} text-xs`}></i>
+                          </button>
+                          <button onClick={() => deleteCustomer(c.id)} className="w-8 h-8 rounded-lg bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-all"><i className="fa-solid fa-trash text-xs"></i></button>
+                        </>
+                      )}
+                      {userRole === 'DRIVER' && <span className="text-[10px] text-slate-300 italic">View Only</span>}
                     </div>
                   </td>
                 </tr>
@@ -443,22 +456,31 @@ const CustomerMaster: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => {
+                        setIsLocating(true);
                         if ("geolocation" in navigator) {
                           navigator.geolocation.getCurrentPosition(position => {
-                            alert(`Location Captured: ${position.coords.latitude}, ${position.coords.longitude}`);
-                            // Ideally strict mode wouldn't allow alerts, but for MVP it's fine.
-                            // If we want to store it, we would need state for it.
-                            // For now, just confirming it works as the submit handler uses it too.
-                            // But let's actually set it if we add lat/lng to state.
-                            // We'll assume the handle submit will use it again basically.
+                            setFormData(prev => ({ ...prev, lat: position.coords.latitude, lng: position.coords.longitude }));
+                            setIsLocating(false);
+                          }, (err) => {
+                            alert("Location failed: " + err.message);
+                            setIsLocating(false);
                           });
+                        } else {
+                          setIsLocating(false);
                         }
                       }}
                       className="text-[10px] font-bold text-primary hover:text-secondary flex items-center gap-1 cursor-pointer"
                     >
-                      <i className="fa-solid fa-location-crosshairs"></i> Get Auto Location
+                      <i className={`fa-solid ${isLocating ? 'fa-circle-notch fa-spin' : 'fa-location-crosshairs'}`}></i>
+                      {formData.lat ? 'Update Location' : 'Get Auto Location'}
                     </button>
                   </div>
+                  {formData.lat !== 0 && (
+                    <div className="mb-2 flex items-center gap-2 text-xs font-bold text-green-600 bg-green-50 p-2 rounded-lg border border-green-100">
+                      <i className="fa-solid fa-check-circle"></i>
+                      <span>GPS Captured: {formData.lat.toFixed(6)}, {formData.lng.toFixed(6)}</span>
+                    </div>
+                  )}
                   <textarea required rows={2} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none" value={formData.address} onChange={e => setFormData({ ...formData, address: e.target.value })}></textarea>
                 </div>
 

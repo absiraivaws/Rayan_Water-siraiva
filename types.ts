@@ -47,6 +47,7 @@ export interface Driver {
   nic: string;
   licenseNo: string;
   licenseExpiry: string;
+  email?: string;
   dailySalary: number;
   commissionPct: number;
   status: 'Available' | 'On Route' | 'Leave';

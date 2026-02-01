@@ -166,6 +166,7 @@ export function useSupabaseMutations() {
             nic: driver.nic,
             license_no: driver.licenseNo,
             license_expiry: driver.licenseExpiry,
+            email: driver.email,
             daily_salary: driver.dailySalary,
             commission_pct: driver.commissionPct,
             status: 'Available'
@@ -191,6 +192,7 @@ export function useSupabaseMutations() {
         if (updates.nic) dbUpdates.nic = updates.nic;
         if (updates.licenseNo) dbUpdates.license_no = updates.licenseNo;
         if (updates.licenseExpiry) dbUpdates.license_expiry = updates.licenseExpiry;
+        if (updates.email) dbUpdates.email = updates.email;
         if (updates.dailySalary) dbUpdates.daily_salary = updates.dailySalary;
         if (updates.commissionPct) dbUpdates.commission_pct = updates.commissionPct;
         if (updates.status) dbUpdates.status = updates.status;
