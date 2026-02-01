@@ -4,7 +4,7 @@ import { Session } from '@supabase/supabase-js';
 import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
-import Checklist from './components/Checklist';
+
 import CustomerMaster from './components/CustomerMaster';
 import FleetDrivers from './components/FleetDrivers';
 import RouteMaster from './components/RouteMaster';
@@ -24,6 +24,7 @@ interface MainLayoutProps {
 const MainLayout: React.FC<MainLayoutProps> = ({ session, companyName, logoUrl, handleLogout }) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   // If session is null, redirect to login. This acts as a protected route.
   if (!session) {
@@ -40,12 +41,14 @@ const MainLayout: React.FC<MainLayoutProps> = ({ session, companyName, logoUrl, 
       <style>{`
                 @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
                 .animate-slide-in { animation: slideIn 0.3s ease-out forwards; }
+                @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+                .animate-fade-in { animation: fadeIn 0.2s ease-out forwards; }
             `}</style>
       <Sidebar
         companyName={companyName}
         logoUrl={logoUrl}
-      // Sidebar will internally use useLocation to highlight active links
-      // and useNavigate for navigation, so activeModule/setActiveModule props are removed.
+        isCollapsed={isCollapsed}
+        onToggle={() => setIsCollapsed(!isCollapsed)}
       />
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8 z-10">
@@ -57,7 +60,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ session, companyName, logoUrl, 
           </div>
           <div className="flex items-center gap-6">
             <div className="relative group cursor-pointer p-2 hover:bg-slate-50 rounded-full transition-all">
-              <i className="fa-solid fa-bell text-slate-400 group-hover:text-blue-600 transition-colors"></i>
+              <i className="fa-solid fa-bell text-slate-400 group-hover:text-primary transition-colors"></i>
               <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
             </div>
             <div className="w-px h-6 bg-slate-200"></div>
@@ -68,12 +71,12 @@ const MainLayout: React.FC<MainLayoutProps> = ({ session, companyName, logoUrl, 
                 className="flex items-center gap-3 cursor-pointer group hover:bg-slate-50 p-1.5 rounded-2xl transition-all"
               >
                 <div className="text-right hidden md:block">
-                  <p className="text-xs font-bold text-slate-700 group-hover:text-blue-600 transition-colors">
+                  <p className="text-xs font-bold text-slate-700 group-hover:text-primary transition-colors">
                     {session.user.email?.split('@')[0] || 'User'}
                   </p>
                   <p className="text-[10px] text-slate-400">Administrator</p>
                 </div>
-                <div className="w-9 h-9 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-blue-600 overflow-hidden shadow-sm group-hover:border-blue-300 transition-all">
+                <div className="w-9 h-9 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-primary overflow-hidden shadow-sm group-hover:border-primary/50 transition-all">
                   <i className="fa-solid fa-user-tie text-xl"></i>
                 </div>
               </div>
@@ -142,7 +145,7 @@ const App: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center bg-slate-50 text-blue-600">
+      <div className="h-screen flex items-center justify-center bg-slate-50 text-primary">
         <i className="fa-solid fa-circle-notch fa-spin text-4xl"></i>
       </div>
     );
@@ -164,7 +167,7 @@ const App: React.FC = () => {
           <Route path="/routes" element={<RouteMaster />} />
           <Route path="/deliveries" element={<DailyDelivery customRemarks={remarks} />} />
           <Route path="/finance" element={<FinanceModule />} />
-          <Route path="/checklist" element={<Checklist />} />
+
           <Route path="/settings" element={
             <Settings
               remarks={remarks}

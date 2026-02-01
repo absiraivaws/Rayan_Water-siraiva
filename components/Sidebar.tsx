@@ -4,9 +4,11 @@ import { NavLink } from 'react-router-dom';
 interface SidebarProps {
   companyName: string;
   logoUrl?: string;
+  isCollapsed: boolean;
+  onToggle: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ companyName, logoUrl }) => {
+const Sidebar: React.FC<SidebarProps> = ({ companyName, logoUrl, isCollapsed, onToggle }) => {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: 'fa-chart-line' },
     { id: 'customers', label: 'Customers', icon: 'fa-users' },
@@ -14,58 +16,73 @@ const Sidebar: React.FC<SidebarProps> = ({ companyName, logoUrl }) => {
     { id: 'routes', label: 'Routes', icon: 'fa-map-location-dot' },
     { id: 'deliveries', label: 'Daily Delivery', icon: 'fa-clipboard-list' },
     { id: 'finance', label: 'Finance', icon: 'fa-file-invoice-dollar' },
-    { id: 'checklist', label: 'Checklist', icon: 'fa-check-double' },
   ];
 
   return (
-    <div className="w-64 bg-slate-900 text-white flex flex-col h-full border-r border-slate-700">
-      <div className="p-6 border-b border-slate-800">
-        <h1 className="text-xl font-bold flex items-center gap-3">
-          {logoUrl ? (
-            <img src={logoUrl} alt="L" className="w-8 h-8 object-contain rounded" />
-          ) : (
-            <i className="fa-solid fa-droplet text-blue-400"></i>
-          )}
-          <span className="truncate">{companyName.split(' ')[0]}</span>
-        </h1>
+    <div className={`bg-slate-900 text-white flex flex-col h-full border-r border-slate-700 transition-all duration-300 ${isCollapsed ? 'w-20' : 'w-64'}`}>
+      <div className={`p-6 border-b border-slate-800 flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
+        {!isCollapsed && (
+          <h1 className="text-xl font-bold flex items-center gap-3 animate-fade-in">
+            {logoUrl ? (
+              <img src={logoUrl} alt="L" className="w-8 h-8 object-contain rounded" />
+            ) : (
+              <i className="fa-solid fa-droplet text-primary"></i>
+            )}
+            <span className="truncate">{companyName.split(' ')[0]}</span>
+          </h1>
+        )}
+        <button
+          onClick={onToggle}
+          className={`text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-all p-2 ${isCollapsed ? 'w-full flex justify-center' : ''}`}
+        >
+          <i className={`fa-solid ${isCollapsed ? 'fa-angles-right' : 'fa-angles-left'}`}></i>
+        </button>
       </div>
-      <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+
+      {/* Navigation */}
+      <nav className="flex-1 p-3 space-y-2 overflow-y-auto overflow-x-hidden">
         {menuItems.map((item) => (
           <NavLink
             key={item.id}
             to={`/${item.id}`}
-            className={({ isActive }) => `w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive
-                ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20'
-                : 'text-slate-400 hover:bg-slate-800 hover:text-white'
-              }`}
+            title={isCollapsed ? item.label : ''}
+            className={({ isActive }) => `flex items-center gap-3 px-3 py-3 rounded-xl transition-all ${isActive
+              ? 'bg-primary text-white shadow-lg shadow-primary/20'
+              : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+              } ${isCollapsed ? 'justify-center' : ''}`}
           >
-            <i className={`fa-solid ${item.icon} w-6 text-center`}></i>
-            <span className="font-medium">{item.label}</span>
+            <i className={`fa-solid ${item.icon} w-6 text-center text-lg`}></i>
+            {!isCollapsed && <span className="font-medium truncate animate-fade-in">{item.label}</span>}
           </NavLink>
         ))}
 
-        <div className="pt-4 mt-4 border-t border-slate-800">
+        <div className={`pt-4 mt-4 border-t border-slate-800 ${isCollapsed ? 'flex justify-center' : ''}`}>
           <NavLink
             to="/settings"
-            className={({ isActive }) => `w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive
-                ? 'bg-blue-600 text-white'
-                : 'text-slate-400 hover:bg-slate-800 hover:text-white'
-              }`}
+            title={isCollapsed ? "Settings" : ''}
+            className={({ isActive }) => `flex items-center gap-3 px-3 py-3 rounded-xl transition-all w-full ${isActive
+              ? 'bg-primary text-white'
+              : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+              } ${isCollapsed ? 'justify-center' : ''}`}
           >
-            <i className="fa-solid fa-gear w-6 text-center"></i>
-            <span className="font-medium">Settings</span>
+            <i className="fa-solid fa-gear w-6 text-center text-lg"></i>
+            {!isCollapsed && <span className="font-medium truncate animate-fade-in">Settings</span>}
           </NavLink>
         </div>
       </nav>
 
-      <div className="p-4 border-t border-slate-800 bg-slate-900/50">
-        <div className="bg-slate-800 rounded-xl p-3 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center font-bold text-white shadow-inner">R</div>
-          <div className="overflow-hidden">
-            <p className="text-sm font-semibold truncate">Rayan</p>
-            <p className="text-[10px] text-slate-400 truncate">Owner Access</p>
+      {/* Footer / Toggle */}
+      <div className="p-4 border-t border-slate-800 bg-slate-900/50 flex flex-col gap-4">
+        {!isCollapsed && (
+          <div className="bg-slate-800 rounded-xl p-3 flex items-center gap-3 animate-fade-in">
+            <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center font-bold text-white shadow-inner">R</div>
+            <div className="overflow-hidden">
+              <p className="text-sm font-semibold truncate">Rayan</p>
+              <p className="text-[10px] text-slate-400 truncate">Owner Access</p>
+            </div>
           </div>
-        </div>
+        )}
+        {/* Removed footer button */}
       </div>
     </div>
   );

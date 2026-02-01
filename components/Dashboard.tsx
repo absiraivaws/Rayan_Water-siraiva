@@ -115,8 +115,8 @@ const Dashboard: React.FC = () => {
   }, [filteredTransactions, filteredCustomers]);
 
   const kpis = [
-    { label: "Revenue (Selected)", value: `Rs. ${revenue.toLocaleString()}`, icon: "fa-money-bill-trend-up", color: "text-green-600", bg: "bg-green-100", target: 'finance' },
-    { label: "Delivery Progress", value: pendingDeliveries, icon: "fa-truck-loading", color: "text-blue-600", bg: "bg-blue-100", target: 'deliveries' },
+    { label: "Revenue (Selected)", value: `Rs. ${revenue.toLocaleString()}`, icon: "fa-money-bill-trend-up", color: "text-accent", bg: "bg-accent/10", target: 'finance' },
+    { label: "Delivery Progress", value: pendingDeliveries, icon: "fa-truck-loading", color: "text-primary", bg: "bg-primary/10", target: 'deliveries' },
     { label: "Active Routes", value: `${activeRoutesCount} Routes`, icon: "fa-map", color: "text-purple-600", bg: "bg-purple-100", target: 'routes' },
     { label: "Outstanding (Selected)", value: `Rs. ${totalOutstanding.toLocaleString()}`, icon: "fa-wallet", color: "text-amber-600", bg: "bg-amber-100", target: 'customers' },
   ];
@@ -124,7 +124,7 @@ const Dashboard: React.FC = () => {
   if (loading) {
     return (
       <div className="flex h-full items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -232,7 +232,7 @@ const Dashboard: React.FC = () => {
           <div
             key={idx}
             onClick={() => navigate(`/${kpi.target}`)}
-            className="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 hover:border-blue-300 hover:shadow-md transition-all cursor-pointer group"
+            className="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 hover:border-primary/50 hover:shadow-md transition-all cursor-pointer group"
           >
             <div className="flex justify-between items-start mb-4">
               <div className={`${kpi.bg} ${kpi.color} p-3 rounded-2xl group-hover:scale-110 transition-transform`}>
@@ -255,7 +255,7 @@ const Dashboard: React.FC = () => {
               <XAxis dataKey="name" axisLine={false} tickLine={false} style={{ fontSize: '10px', fontWeight: 'bold' }} />
               <YAxis axisLine={false} tickLine={false} style={{ fontSize: '10px' }} />
               <Tooltip cursor={{ fill: '#f8fafc' }} />
-              <Bar dataKey="sales" name="Cash Sales" fill="#3b82f6" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="sales" name="Cash Sales" fill="#2ea9d1" radius={[6, 6, 0, 0]} />
               <Bar dataKey="credit" name="Credit Sales" fill="#cbd5e1" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
@@ -269,7 +269,7 @@ const Dashboard: React.FC = () => {
               <XAxis dataKey="name" axisLine={false} tickLine={false} style={{ fontSize: '10px', fontWeight: 'bold' }} />
               <YAxis axisLine={false} tickLine={false} style={{ fontSize: '10px' }} />
               <Tooltip />
-              <Line type="monotone" dataKey="sales" stroke="#3b82f6" strokeWidth={4} dot={{ r: 5, fill: '#3b82f6', strokeWidth: 2, stroke: '#fff' }} />
+              <Line type="monotone" dataKey="sales" stroke="#2ea9d1" strokeWidth={4} dot={{ r: 5, fill: '#2ea9d1', strokeWidth: 2, stroke: '#fff' }} />
             </LineChart>
           </ResponsiveContainer>
         </div>

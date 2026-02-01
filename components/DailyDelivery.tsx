@@ -113,7 +113,7 @@ const DailyDelivery: React.FC<DailyDeliveryProps> = ({ customRemarks }) => {
       {/* Route Selector */}
       <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
             <i className="fa-solid fa-route"></i>
           </div>
           <div>
@@ -137,10 +137,10 @@ const DailyDelivery: React.FC<DailyDeliveryProps> = ({ customRemarks }) => {
         <div className="bg-white p-8 rounded-[40px] border border-slate-200 shadow-sm">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <div className="w-3 h-3 bg-blue-600 rounded-full animate-pulse"></div>
+              <div className="w-3 h-3 bg-primary rounded-full animate-pulse"></div>
               <h2 className="text-xl font-black text-slate-800">ACTIVE TASK</h2>
             </div>
-            <span className="bg-blue-600 text-white text-[10px] font-black px-3 py-1.5 rounded-full uppercase shadow-lg shadow-blue-500/20">
+            <span className="bg-primary text-white text-[10px] font-black px-3 py-1.5 rounded-full uppercase shadow-lg shadow-primary/20">
               {activeStep + 1} / {routeCustomers.length}
             </span>
           </div>
@@ -171,10 +171,10 @@ const DailyDelivery: React.FC<DailyDeliveryProps> = ({ customRemarks }) => {
               <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-60"></div>
 
               <div className="absolute bottom-5 left-5 right-5 pointer-events-none">
-                <span className="bg-blue-600 text-white px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider shadow-lg">Delivery Stop</span>
+                <span className="bg-primary text-white px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider shadow-lg">Delivery Stop</span>
                 <h3 className="text-2xl font-black text-white mt-2 drop-shadow-md">{currentCustomer.name}</h3>
                 <p className="text-slate-200 text-sm font-medium mt-1 drop-shadow-md flex items-center gap-2">
-                  <i className="fa-solid fa-location-dot text-blue-400"></i> {currentCustomer.address}
+                  <i className="fa-solid fa-location-dot text-primary"></i> {currentCustomer.address}
                 </p>
               </div>
             </div>
@@ -185,7 +185,7 @@ const DailyDelivery: React.FC<DailyDeliveryProps> = ({ customRemarks }) => {
               href={`https://www.google.com/maps/dir/?api=1&destination=${currentCustomer.lat},${currentCustomer.lng}`}
               target="_blank"
               rel="noreferrer"
-              className="flex-1 bg-blue-50 text-blue-600 py-4 rounded-2xl font-black text-center flex items-center justify-center gap-3 hover:bg-blue-100 transition-all"
+              className="flex-1 bg-primary/10 text-primary py-4 rounded-2xl font-black text-center flex items-center justify-center gap-3 hover:bg-primary/20 transition-all"
             >
               <i className="fa-solid fa-location-arrow"></i> Navigate
             </a>
@@ -197,7 +197,7 @@ const DailyDelivery: React.FC<DailyDeliveryProps> = ({ customRemarks }) => {
           {!showConfirm ? (
             <button
               onClick={() => setShowConfirm(true)}
-              className="w-full py-5 bg-slate-900 text-white rounded-3xl font-black text-lg shadow-xl shadow-slate-200 hover:bg-slate-800 transition-all"
+              className="w-full py-5 bg-primary text-white rounded-3xl font-black text-lg shadow-2xl shadow-primary/20 hover:scale-[1.01] active:scale-95 transition-all"
             >
               I've Arrived at Site
             </button>
@@ -230,7 +230,7 @@ const DailyDelivery: React.FC<DailyDeliveryProps> = ({ customRemarks }) => {
                   <select
                     value={remark}
                     onChange={(e) => setRemark(e.target.value)}
-                    className="w-full p-4 border-2 border-slate-100 rounded-2xl text-sm font-bold outline-none bg-slate-50 focus:border-blue-500 transition-colors"
+                    className="w-full p-4 border-2 border-slate-100 rounded-2xl text-sm font-bold outline-none bg-slate-50 focus:border-primary transition-colors"
                   >
                     <option value="">Status: Delivered Successfully</option>
                     {activeRemarks.map((r, i) => <option key={i} value={r}>{r}</option>)}
@@ -244,7 +244,7 @@ const DailyDelivery: React.FC<DailyDeliveryProps> = ({ customRemarks }) => {
                       <button
                         key={m}
                         onClick={() => setPaymentMethod(m as any)}
-                        className={`py-3 border-2 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${paymentMethod === m ? 'border-blue-500 bg-blue-50 text-blue-600' : 'border-slate-100 hover:border-blue-200'
+                        className={`py-3 border-2 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${paymentMethod === m ? 'border-primary bg-primary/10 text-primary' : 'border-slate-100 hover:border-primary/50'
                           }`}
                       >
                         {m}
@@ -257,7 +257,7 @@ const DailyDelivery: React.FC<DailyDeliveryProps> = ({ customRemarks }) => {
               <button
                 onClick={handleDeliverySubmit}
                 disabled={isSaving}
-                className="w-full py-5 bg-green-600 text-white rounded-3xl font-black text-lg shadow-2xl shadow-green-100 mt-6 hover:bg-green-700 active:scale-95 transition-all disabled:opacity-50"
+                className="w-full py-5 bg-accent text-white rounded-3xl font-black text-lg shadow-2xl shadow-accent/20 mt-6 hover:bg-accent/90 active:scale-95 transition-all disabled:opacity-50"
               >
                 {isSaving ? <i className="fa-solid fa-spinner fa-spin"></i> : 'Verify & Log Delivery'}
               </button>
@@ -275,15 +275,15 @@ const DailyDelivery: React.FC<DailyDeliveryProps> = ({ customRemarks }) => {
         <div className="space-y-3">
           {routeCustomers.map((c, idx) => (
             <div key={c.id} className={`flex items-center gap-5 p-4 rounded-3xl border transition-all ${idx < activeStep ? 'opacity-30 border-slate-50' : 'border-slate-50 hover:bg-slate-50'}`}>
-              <span className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-black ${idx === activeStep ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-400'}`}>
+              <span className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-black ${idx === activeStep ? 'bg-primary text-white' : 'bg-slate-100 text-slate-400'}`}>
                 {idx + 1}
               </span>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-black text-slate-800 truncate">{c.name}</p>
                 <p className="text-[10px] text-slate-400 font-bold truncate">GPS: {c.lat.toFixed(4)}, {c.lng.toFixed(4)}</p>
               </div>
-              {idx < activeStep && <i className="fa-solid fa-circle-check text-green-500 text-lg"></i>}
-              {idx === activeStep && <i className="fa-solid fa-truck-fast text-blue-600 animate-bounce"></i>}
+              {idx < activeStep && <i className="fa-solid fa-circle-check text-accent text-lg"></i>}
+              {idx === activeStep && <i className="fa-solid fa-truck-fast text-primary animate-bounce"></i>}
             </div>
           ))}
         </div>

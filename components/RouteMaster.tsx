@@ -92,11 +92,11 @@ const RouteMaster: React.FC = () => {
             onClick={handleOptimize}
             className="bg-white border border-slate-200 px-6 py-2 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-50 shadow-sm transition-all active:scale-95"
           >
-            <i className="fa-solid fa-magic-wand-sparkles mr-2 text-blue-500"></i> Auto-Optimize
+            <i className="fa-solid fa-magic-wand-sparkles mr-2 text-primary"></i> Auto-Optimize
           </button>
           <button
             onClick={() => setShowRouteForm(true)}
-            className="bg-blue-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/20"
+            className="bg-primary text-white px-6 py-2 rounded-xl font-bold hover:bg-secondary transition-all shadow-lg shadow-primary/20"
           >
             <i className="fa-solid fa-plus mr-2"></i> New Route
           </button>
@@ -111,7 +111,7 @@ const RouteMaster: React.FC = () => {
               <button
                 key={r.id}
                 onClick={() => setSelectedRoute(r)}
-                className={`w-full text-left p-5 rounded-3xl border transition-all ${selectedRoute?.id === r.id ? 'bg-blue-600 border-blue-600 text-white shadow-xl scale-[1.02]' : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300'
+                className={`w-full text-left p-5 rounded-3xl border transition-all ${selectedRoute?.id === r.id ? 'bg-primary border-primary text-white shadow-xl scale-[1.02]' : 'bg-white border-slate-200 text-slate-600 hover:border-primary/50'
                   }`}
               >
                 <div className="flex justify-between items-start mb-2">
@@ -133,8 +133,8 @@ const RouteMaster: React.FC = () => {
           <div className="flex justify-between items-center mb-10">
             <h3 className="font-black text-2xl text-slate-800">Master Delivery Sequence</h3>
             <div className="flex items-center gap-2">
-              <button className="w-8 h-8 rounded-full bg-slate-50 text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-all"><i className="fa-solid fa-print"></i></button>
-              <button className="w-8 h-8 rounded-full bg-slate-50 text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-all"><i className="fa-solid fa-share-nodes"></i></button>
+              <button className="w-8 h-8 rounded-full bg-slate-50 text-slate-400 hover:text-primary hover:bg-primary/10 transition-all"><i className="fa-solid fa-print"></i></button>
+              <button className="w-8 h-8 rounded-full bg-slate-50 text-slate-400 hover:text-primary hover:bg-primary/10 transition-all"><i className="fa-solid fa-share-nodes"></i></button>
             </div>
           </div>
 
@@ -153,14 +153,14 @@ const RouteMaster: React.FC = () => {
                 <div className="space-y-4">
                   {optimizedSequence.map((customer, index) => (
                     <div key={customer.id} className="relative pl-14 group">
-                      <div className="absolute left-2.5 top-3 w-7 h-7 rounded-full bg-white border-2 border-slate-100 text-slate-300 flex items-center justify-center text-[10px] font-black z-10 group-hover:border-blue-400 group-hover:text-blue-600 transition-all">
+                      <div className="absolute left-2.5 top-3 w-7 h-7 rounded-full bg-white border-2 border-slate-100 text-slate-300 flex items-center justify-center text-[10px] font-black z-10 group-hover:border-primary/60 group-hover:text-primary transition-all">
                         {index + 1}
                       </div>
                       <div className="p-5 rounded-[24px] border border-slate-100 bg-white group-hover:shadow-xl group-hover:border-blue-100 group-hover:-translate-y-1 transition-all flex justify-between items-center">
                         <div className="flex-1 min-w-0 pr-4">
                           <div className="flex items-center gap-2 mb-1">
                             <p className="font-black text-slate-800 text-base truncate">{customer.name}</p>
-                            <span className={`text-[9px] font-black px-1.5 py-0.5 rounded border ${customer.waterType === 'Drinking' ? 'bg-blue-50 text-blue-600 border-blue-100' : 'bg-teal-50 text-teal-600 border-teal-100'}`}>
+                            <span className={`text-[9px] font-black px-1.5 py-0.5 rounded border ${customer.waterType === 'Drinking' ? 'bg-primary/10 text-primary border-primary/20' : 'bg-accent/10 text-accent border-accent/20'}`}>
                               {customer.waterType}
                             </span>
                           </div>
@@ -174,14 +174,14 @@ const RouteMaster: React.FC = () => {
                           <button
                             onClick={() => moveItem(index, 'up')}
                             disabled={index === 0}
-                            className="w-10 h-10 flex items-center justify-center hover:bg-slate-50 rounded-2xl text-slate-400 hover:text-blue-600 disabled:opacity-20"
+                            className="w-10 h-10 flex items-center justify-center hover:bg-slate-50 rounded-2xl text-slate-400 hover:text-primary disabled:opacity-20"
                           >
                             <i className="fa-solid fa-arrow-up"></i>
                           </button>
                           <button
                             onClick={() => moveItem(index, 'down')}
                             disabled={index === optimizedSequence.length - 1}
-                            className="w-10 h-10 flex items-center justify-center hover:bg-slate-50 rounded-2xl text-slate-400 hover:text-blue-600 disabled:opacity-20"
+                            className="w-10 h-10 flex items-center justify-center hover:bg-slate-50 rounded-2xl text-slate-400 hover:text-primary disabled:opacity-20"
                           >
                             <i className="fa-solid fa-arrow-down"></i>
                           </button>
@@ -211,7 +211,7 @@ const RouteMaster: React.FC = () => {
             <form onSubmit={handleCreateRoute} className="space-y-6">
               <div>
                 <label className="text-xs font-bold text-slate-400 uppercase mb-2 block ml-1 tracking-widest">Route Identifier</label>
-                <input required value={newRouteData.name} onChange={e => setNewRouteData({ ...newRouteData, name: e.target.value })} className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all" placeholder="e.g. Northern Industrial Park" />
+                <input required value={newRouteData.name} onChange={e => setNewRouteData({ ...newRouteData, name: e.target.value })} className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-primary transition-all" placeholder="e.g. Northern Industrial Park" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -229,7 +229,7 @@ const RouteMaster: React.FC = () => {
                   </select>
                 </div>
               </div>
-              <button type="submit" disabled={isSaving} className="w-full py-5 bg-blue-600 text-white font-black text-lg rounded-3xl shadow-2xl shadow-blue-500/20 hover:scale-[1.02] active:scale-95 transition-all mt-10">
+              <button type="submit" disabled={isSaving} className="w-full py-5 bg-primary text-white font-black text-lg rounded-3xl shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all mt-10">
                 {isSaving ? <i className="fa-solid fa-spinner fa-spin"></i> : 'Initialize Route'}
               </button>
             </form>

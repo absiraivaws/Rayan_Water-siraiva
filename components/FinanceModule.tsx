@@ -114,7 +114,7 @@ const FinanceModule: React.FC = () => {
           </div>
           <button
             onClick={() => setShowExpenseForm(true)}
-            className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-blue-700 shadow-lg shadow-blue-500/20 transition-all"
+            className="bg-primary text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-secondary shadow-lg shadow-primary/20 transition-all"
           >
             <i className="fa-solid fa-plus mr-2"></i> Record Expense
           </button>
@@ -127,8 +127,8 @@ const FinanceModule: React.FC = () => {
           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Total Gross Revenue</p>
           <h3 className="text-3xl font-black text-slate-800 tracking-tighter">Rs. {totalRevenue.toLocaleString()}</h3>
           <div className="mt-4 flex gap-3 text-[10px] font-black">
-            <span className="text-green-600 bg-green-50 px-3 py-1.5 rounded-full uppercase">Cash: {cashPct}%</span>
-            <span className="text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full uppercase">Credit: {creditPct}%</span>
+            <span className="text-accent bg-accent/10 px-3 py-1.5 rounded-full uppercase">Cash: {cashPct}%</span>
+            <span className="text-primary bg-primary/10 px-3 py-1.5 rounded-full uppercase">Credit: {creditPct}%</span>
           </div>
         </div>
         <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
@@ -140,9 +140,9 @@ const FinanceModule: React.FC = () => {
             <span className="bg-slate-100 px-2 py-1 rounded">Payroll</span>
           </div>
         </div>
-        <div className="bg-slate-900 p-5 rounded-3xl shadow-2xl relative overflow-hidden group">
-          <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-500/20 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000"></div>
-          <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-2">Projected Net Profit</p>
+        <div className="bg-primary p-5 rounded-3xl shadow-2xl relative overflow-hidden group">
+          <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/20 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000"></div>
+          <p className="text-[10px] font-black text-white/80 uppercase tracking-widest mb-2">Projected Net Profit</p>
           <h3 className={`text-3xl font-black tracking-tighter ${netProfit >= 0 ? 'text-white' : 'text-red-400'}`}>
             Rs. {netProfit.toLocaleString()}
           </h3>
@@ -164,19 +164,19 @@ const FinanceModule: React.FC = () => {
             history.map((t: any, idx) => (
               <div key={idx} className="p-6 flex justify-between items-center hover:bg-slate-50 transition-colors group">
                 <div className="flex gap-5 items-center">
-                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-lg ${t.type === 'Expense' ? 'bg-red-50 text-red-500' : 'bg-green-50 text-green-500'}`}>
+                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-lg ${t.type === 'Expense' ? 'bg-red-50 text-red-500' : 'bg-accent/10 text-accent'}`}>
                     <i className={`fa-solid ${t.type === 'Expense' ? 'fa-arrow-up-right' : 'fa-arrow-down-left'}`}></i>
                   </div>
                   <div>
                     <p className="font-black text-slate-800">{t.title}</p>
                     <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest flex items-center gap-2">
                       {t.date} • {t.cat}
-                      {t.customerId && <span className="text-blue-400 bg-blue-50 px-1.5 py-0.5 rounded">ID: {t.customerId}</span>}
+                      {t.customerId && <span className="text-primary bg-primary/10 px-1.5 py-0.5 rounded">ID: {t.customerId}</span>}
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-6">
-                  <p className={`font-black text-lg ${t.type === 'Expense' ? 'text-red-600' : 'text-green-600'}`}>
+                  <p className={`font-black text-lg ${t.type === 'Expense' ? 'text-red-600' : 'text-accent'}`}>
                     {t.type === 'Expense' ? '-' : '+'}Rs. {Number(t.amount).toLocaleString()}
                   </p>
                   <button className="text-slate-200 group-hover:text-slate-400 transition-colors"><i className="fa-solid fa-ellipsis-vertical"></i></button>
@@ -249,7 +249,7 @@ const FinanceModule: React.FC = () => {
               <button
                 type="submit"
                 disabled={isSaving}
-                className="w-full py-5 bg-blue-600 text-white font-black rounded-3xl shadow-xl hover:bg-blue-700 transition-all disabled:opacity-50"
+                className="w-full py-5 bg-primary text-white font-black rounded-3xl shadow-xl hover:bg-secondary transition-all disabled:opacity-50"
               >
                 {isSaving ? 'Recording...' : 'Post Transaction'}
               </button>

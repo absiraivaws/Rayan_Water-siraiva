@@ -10,27 +10,25 @@ const Checklist: React.FC = () => {
         {MODULE_CHECKLIST.map((item) => (
           <div key={item.id} className="flex items-center justify-between p-4 border-b last:border-0 hover:bg-slate-50 transition-colors">
             <div className="flex items-center gap-4">
-              <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                item.status === 'Done' ? 'bg-green-100 text-green-700' : 
-                item.status === 'Doing' ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-500'
-              }`}>
+              <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${item.status === 'Done' ? 'bg-accent/10 text-accent' :
+                  item.status === 'Doing' ? 'bg-primary/10 text-primary' : 'bg-slate-100 text-slate-500'
+                }`}>
                 {item.id}
               </span>
               <p className={`font-medium ${item.status === 'Done' ? 'line-through text-slate-400' : 'text-slate-700'}`}>
                 {item.task}
               </p>
             </div>
-            <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
-              item.status === 'Done' ? 'bg-green-100 text-green-700 border border-green-200' : 
-              item.status === 'Doing' ? 'bg-blue-100 text-blue-700 border border-blue-200' : 'bg-slate-100 text-slate-500 border border-slate-200'
-            }`}>
+            <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${item.status === 'Done' ? 'bg-accent/10 text-accent border border-accent/20' :
+                item.status === 'Doing' ? 'bg-primary/10 text-primary border border-primary/20' : 'bg-slate-100 text-slate-500 border border-slate-200'
+              }`}>
               {item.status}
             </span>
           </div>
         ))}
       </div>
-      <div className="p-4 bg-blue-50 border border-blue-100 rounded-xl">
-        <p className="text-sm text-blue-800">
+      <div className="p-4 bg-primary/10 border border-primary/20 rounded-xl">
+        <p className="text-sm text-secondary">
           <i className="fa-solid fa-info-circle mr-2"></i>
           Rayan, we are currently focused on completing the <strong>Delivery & Collection</strong> logic to enable the mobile driver module.
         </p>

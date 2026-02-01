@@ -181,7 +181,7 @@ const FleetDrivers: React.FC = () => {
             <h3 className="text-xl font-bold text-slate-800">Vehicle Master</h3>
             <button
               onClick={() => setShowVehicleForm(true)}
-              className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-lg hover:bg-blue-700 transition-all"
+              className="bg-primary text-white px-4 py-2 rounded-xl text-sm font-bold shadow-lg hover:bg-secondary transition-all"
             >
               <i className="fa-solid fa-plus mr-1"></i> Add Vehicle
             </button>
@@ -200,7 +200,7 @@ const FleetDrivers: React.FC = () => {
                       <p className="font-bold text-slate-800 text-lg">{v.number}</p>
                       <p className="text-xs text-slate-500">Cap: {v.capacityValue} {v.capacityUnit} | {v.fuelType}</p>
                       <div className="flex items-center gap-3 mt-1">
-                        <p className="text-[10px] text-blue-600 font-bold uppercase">Mileage: {v.avgMileage} km/l</p>
+                        <p className="text-[10px] text-primary font-bold uppercase">Mileage: {v.avgMileage} km/l</p>
                         {assignedDriver && (
                           <p className="text-[10px] text-slate-500 font-bold uppercase flex items-center gap-1">
                             <i className="fa-solid fa-user-tag"></i> {assignedDriver.name}
@@ -211,7 +211,7 @@ const FleetDrivers: React.FC = () => {
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="text-right">
-                      <span className={`text-[10px] font-black uppercase px-2 py-1 rounded-full ${v.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                      <span className={`text-[10px] font-black uppercase px-2 py-1 rounded-full ${v.status === 'Active' ? 'bg-accent/10 text-accent' : 'bg-red-100 text-red-700'}`}>
                         {v.status}
                       </span>
                     </div>
@@ -237,7 +237,7 @@ const FleetDrivers: React.FC = () => {
             <h3 className="text-xl font-bold text-slate-800">Driver Master</h3>
             <button
               onClick={() => setShowDriverForm(true)}
-              className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-lg hover:bg-blue-700 transition-all"
+              className="bg-primary text-white px-4 py-2 rounded-xl text-sm font-bold shadow-lg hover:bg-secondary transition-all"
             >
               <i className="fa-solid fa-plus mr-1"></i> Add Driver
             </button>
@@ -246,7 +246,7 @@ const FleetDrivers: React.FC = () => {
             {drivers.map(d => (
               <div key={d.id} className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex items-center justify-between group relative overflow-hidden">
                 <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 font-bold text-xl border border-blue-100">
+                  <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary font-bold text-xl border border-primary/20">
                     {d.name.charAt(0)}
                   </div>
                   <div>
@@ -261,7 +261,7 @@ const FleetDrivers: React.FC = () => {
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className={`text-[10px] font-black uppercase px-2 py-1 rounded-full ${d.status === 'Available' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}>
+                  <span className={`text-[10px] font-black uppercase px-2 py-1 rounded-full ${d.status === 'Available' ? 'bg-accent/10 text-accent' : 'bg-primary/10 text-secondary'}`}>
                     {d.status}
                   </span>
                   <div className="relative group/menu">
@@ -344,7 +344,7 @@ const FleetDrivers: React.FC = () => {
                 <label className="text-xs font-bold text-slate-400 block mb-1">Average Mileage (km/l)</label>
                 <input required value={vehicleForm.avgMileage} onChange={e => setVehicleForm({ ...vehicleForm, avgMileage: e.target.value })} type="number" className="w-full p-3 bg-slate-50 border rounded-xl" />
               </div>
-              <button disabled={isSaving} type="submit" className="w-full py-4 bg-blue-600 text-white font-bold rounded-xl mt-4 shadow-lg shadow-blue-100 flex justify-center">
+              <button disabled={isSaving} type="submit" className="w-full py-4 bg-primary text-white font-bold rounded-xl mt-4 shadow-lg shadow-primary/20 flex justify-center">
                 {isSaving ? <i className="fa-solid fa-spinner fa-spin"></i> : (editingItem ? 'Update Vehicle' : 'Save Vehicle')}
               </button>
             </form>
@@ -371,7 +371,7 @@ const FleetDrivers: React.FC = () => {
                 <input required value={driverForm.dailySalary} onChange={e => setDriverForm({ ...driverForm, dailySalary: e.target.value })} type="number" className="w-full p-3 bg-slate-50 border rounded-xl" placeholder="Daily Salary" />
                 <input required value={driverForm.commissionPct} onChange={e => setDriverForm({ ...driverForm, commissionPct: e.target.value })} type="number" className="w-full p-3 bg-slate-50 border rounded-xl" placeholder="Commission %" />
               </div>
-              <button disabled={isSaving} type="submit" className="w-full py-4 bg-blue-600 text-white font-bold rounded-xl mt-4 shadow-lg shadow-blue-100 flex justify-center">
+              <button disabled={isSaving} type="submit" className="w-full py-4 bg-primary text-white font-bold rounded-xl mt-4 shadow-lg shadow-primary/20 flex justify-center">
                 {isSaving ? <i className="fa-solid fa-spinner fa-spin"></i> : (editingItem ? 'Update Driver' : 'Complete Onboarding')}
               </button>
             </form>

@@ -51,26 +51,26 @@ const Auth: React.FC = () => {
             <div className="w-full max-w-5xl h-[600px] bg-white rounded-[40px] shadow-2xl overflow-hidden flex">
 
                 {/* Visual Side */}
-                <div className="hidden lg:flex flex-1 bg-blue-600 relative flex-col justify-between p-12 text-white">
+                <div className="hidden lg:flex flex-1 bg-primary relative flex-col justify-between p-12 text-white">
                     <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1548839140-29a749e1cf4d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80')] bg-cover bg-center opacity-20 mix-blend-overlay"></div>
-                    <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-400 rounded-full blur-3xl opacity-50"></div>
+                    <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/60 rounded-full blur-3xl opacity-50"></div>
                     <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-indigo-500 rounded-full blur-3xl opacity-50"></div>
 
                     <div className="relative z-10">
                         <div className="flex items-center gap-3 mb-2">
-                            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-blue-600 shadow-lg">
+                            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-primary shadow-lg">
                                 <i className="fa-solid fa-droplet text-xl"></i>
                             </div>
                             <span className="text-2xl font-black tracking-tighter">HydroFlow</span>
                         </div>
-                        <p className="text-blue-100 font-medium">Water Distribution Management ERP</p>
+                        <p className="text-white/80 font-medium">Water Distribution Management ERP</p>
                     </div>
 
                     <div className="relative z-10 space-y-6">
                         <div className="bg-white/10 backdrop-blur-md p-6 rounded-3xl border border-white/20">
                             <p className="font-bold text-lg">"Streamlining our fleet and delivery operations has never been easier."</p>
                             <div className="mt-4 flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-blue-400 flex items-center justify-center font-bold">JD</div>
+                                <div className="w-10 h-10 rounded-full bg-primary/60 flex items-center justify-center font-bold">JD</div>
                                 <div>
                                     <p className="text-sm font-bold">John Doe</p>
                                     <p className="text-xs text-blue-200">Operations Manager</p>
@@ -93,7 +93,7 @@ const Auth: React.FC = () => {
                             </div>
                         )}
                         {message && (
-                            <div className="mb-6 p-4 bg-green-50 text-green-600 rounded-2xl text-sm font-bold flex items-center gap-3 animate-pulse">
+                            <div className="mb-6 p-4 bg-accent/10 text-accent rounded-2xl text-sm font-bold flex items-center gap-3 animate-pulse">
                                 <i className="fa-solid fa-check-circle"></i>
                                 {message}
                             </div>
@@ -107,7 +107,7 @@ const Auth: React.FC = () => {
                                     <input
                                         type="email"
                                         required
-                                        className="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl font-bold text-slate-800 outline-none focus:border-blue-500 focus:bg-white transition-all"
+                                        className="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl font-bold text-slate-800 outline-none focus:border-primary focus:bg-white transition-all"
                                         placeholder="admin@hydroflow.com"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
@@ -122,7 +122,7 @@ const Auth: React.FC = () => {
                                     <input
                                         type="password"
                                         required
-                                        className="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl font-bold text-slate-800 outline-none focus:border-blue-500 focus:bg-white transition-all"
+                                        className="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl font-bold text-slate-800 outline-none focus:border-primary focus:bg-white transition-all"
                                         placeholder="••••••••"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
@@ -133,7 +133,7 @@ const Auth: React.FC = () => {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full py-5 bg-blue-600 text-white rounded-2xl font-black text-lg shadow-xl shadow-blue-200 hover:bg-blue-700 hover:shadow-2xl hover:-translate-y-1 transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none"
+                                className="w-full py-5 bg-primary text-white rounded-2xl font-black text-lg shadow-xl shadow-primary/20 hover:bg-secondary hover:shadow-2xl hover:-translate-y-1 transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none"
                             >
                                 {loading ? <i className="fa-solid fa-circle-notch fa-spin"></i> : (isLogin ? 'Sign In to Dashboard' : 'Create Account')}
                             </button>
@@ -145,7 +145,7 @@ const Auth: React.FC = () => {
                                 <button
                                     type="button"
                                     onClick={() => { setIsLogin(!isLogin); setError(null); setMessage(null); }}
-                                    className="text-blue-600 hover:underline ml-1"
+                                    className="text-primary hover:underline ml-1"
                                 >
                                     {isLogin ? "Create Account" : "Sign In"}
                                 </button>
